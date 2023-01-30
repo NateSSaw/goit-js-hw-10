@@ -29,7 +29,9 @@ function createMarkup({ name, capital, population, flags, languages }) {
   <h2>${name.official}</h2>
     <p><span class="style">Capital: </span>${capital}</p>
     <p><span class="style">Population: </span>${population}</p>
-    <p><span class="style">Languages: </span>${Object.values(languages)}</p>
+    <p><span class="style">Languages: </span>${Object.values(languages).join(
+      ', '
+    )}</p>
     `;
   countryCard.insertAdjacentHTML('beforeend', markup);
 }
