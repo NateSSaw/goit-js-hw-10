@@ -1,40 +1,40 @@
-import Notiflix from 'notiflix';
+import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import debounce from 'lodash.debounce';
 import './css/styles.css';
-import API from './fetchCountries';
+import APIRestCountries from './fetchCountries';
 
 const DEBOUNCE_DELAY = 3000;
 
 const input = document.getElementById('search-box');
 const countryList = document.querySelector('.country-list');
 const countryCard = document.querySelector('.country-info');
+
+const APIRestCountriesSearch = new APIRestCountries();
 input.addEventListener('input', debounce(onType, DEBOUNCE_DELAY));
 
 function onType(e) {
   e.preventDefault();
-  const inputValue = e.target.value.trim();
-  if (country.value === '') {
+  APIRestCountriesSearch.query = e.target.value.trim();
+  if (APIRestCountriesSearch.query === '') {
     clearPage();
     return;
   }
-  API.fetchCountries(inputValue).then(country => {
-    const markup = createMarkup(country[0]);
-    console.log(markup);
-    // if (data.length === 0) throw new Error('No data!');
-  });
+
+  APIRestCountriesSearch.fetchCountries().then(searchResult).catch(onError);
 }
 
 function createMarkup({ name, capital, population, flags, languages }) {
   const markup = `<img src="${flags.svg}" width="30", height="20">
   <h2>${name.official}</h2>
-    <p>Capital:${capital}</p>
-    <p>Population:${population}</p>
-    <p>Languages:${Object.values(languages)}</p>
+    <p>Capital: ${capital}</p>
+    <p>Population: ${population}</p>
+    <p>Languages: ${Object.values(languages)}</p>
     `;
   countryCard.insertAdjacentHTML('beforeend', markup);
 }
 
 function searchResult(countries) {
+  clearPage();
   if (countries.length > 10) {
     Notify.info('Too many matches found. Please enter a more specific name.');
   } else if (countries.length >= 2 && countries.length <= 10) {
@@ -61,6 +61,6 @@ function clearPage() {
   countryCard.innerHTML = '';
 }
 
-function onFetchError(error) {
-  Notify.failure(error);
+function onError(err) {
+  Notify.failure(err);
 }
