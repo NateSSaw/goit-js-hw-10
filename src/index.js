@@ -14,6 +14,7 @@ input.addEventListener('input', debounce(onType, DEBOUNCE_DELAY));
 
 function onType(e) {
   e.preventDefault();
+
   APIRestCountriesSearch.query = e.target.value.trim();
   if (APIRestCountriesSearch.query === '') {
     clearPage();
@@ -50,7 +51,7 @@ function createListOfCuntries(countries) {
   const markup = countries
     .map(
       ({ flags, name }) =>
-        `<li><img src="${flags.svg}"><p>${name.official}</p></li>`
+        `<li style="list-style: none; display: flex; align-items: center"><img src="${flags.svg}" width="30", height="20"><p style="line-height: 0; margin-left: 10px;">${name.official}</p></li>`
     )
     .join('');
   countryList.insertAdjacentHTML('beforeend', markup);
