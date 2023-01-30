@@ -25,13 +25,12 @@ function onType(e) {
 }
 
 function createMarkup({ name, capital, population, flags, languages }) {
+  const lang = Object.values(languages).join(', ');
   const markup = `<img src="${flags.svg}" width="30", height="20">
   <h2>${name.official}</h2>
     <p><span class="style">Capital: </span>${capital}</p>
     <p><span class="style">Population: </span>${population}</p>
-    <p><span class="style">Languages: </span>${Object.values(languages).join(
-      ', '
-    )}</p>
+    <p><span class="style">Languages: </span>${lang}</p>
     `;
   countryCard.insertAdjacentHTML('beforeend', markup);
 }
